@@ -6,7 +6,7 @@ description = "Xynth is an ASIC/GPU-resistant cryptographic hashing algorithm wr
 license = "MIT"
 repository = "https://github.com/ImmortalOctogen/Xynth"
 documentation = ""
-readme = "https://github.com/ImmortalOctogen/Xynth/blob/main/README.md"
+readme = "https://github.com/ImmortalOctogen/Xynth/blob/master/README.md"
 categories = ["cryptography, algorithms"]
 keywords = ["hash, cryptography, algorithms"]
 
