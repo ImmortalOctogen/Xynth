@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"rust-analyzer.cargo.extraEnv": {
+			"RUSTFLAGS": "-C target-feature=+avx2" //target-cpu=native
+		},
+	}
+}
