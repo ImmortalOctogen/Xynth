@@ -1,7 +1,6 @@
 //! Documentation is coming soon...
 #![feature(stdsimd)]
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"),
-    target_feature = "avx2")
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"),)//target_feature = "avx2")
 )]
 
 pub mod avx2;
@@ -21,8 +20,8 @@ pub struct Registers {
 }
 
 impl XynthVM {
-    pub fn new(&self) -> Self {
-        Self {
+    pub fn new() -> XynthVM {
+        XynthVM {
             memory : [0u128; 16777216],
             registers : Registers {
                 rwr0 : 0u128,
