@@ -1,11 +1,13 @@
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"),)
+use std::arch::x86_64::_mm256_set_m128i;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"),)
     //target_feature = "avx2")
-)]
+]
 
 use std::arch::x86_64::{
     _mm256_aesenc_epi128, _mm256_aesdec_epi128, __m256i, __m256d, _mm256_set_epi64x, _mm256_set_pd,
     _mm256_extract_epi64, _mm256_sub_epi64, _mm256_div_pd,
-    _mm256_mul_epi32, _mm256_add_epi64, _mm256_mulhi_epi16, _mm256_rorv_epi64, _mm256_abs_epi64, _mm256_store_pd,
+    _mm256_mul_epi32, _mm256_add_epi64, _mm256_mulhi_epi16, _mm256_store_pd, _mm256_hadds_epi16,
+    __m128i, _mm_set_epi64x, _mm_aesdec_si128, _mm_aesenc_si128,
 };
 
 #[allow(nonstandard_style)]
@@ -17,12 +19,13 @@ impl m256i {
         unsafe {m256i(_mm256_setzero_si256())}
     }*/
     pub fn from_u8(bytes: &[u8]) -> m256i {
-        assert_eq!(bytes.len(), 48); //set to debug_assert_eq!
+        //assert_eq!(bytes.len(), 48); //set to debug_assert_eq!
+        //println!("passing {}", bytes.len());
 
-        let u0: u64 = u64::from_le_bytes(bytes[0..8].try_into().unwrap());
-        let u1: u64 = u64::from_le_bytes(bytes[8..16].try_into().unwrap());
-        let u2: u64 = u64::from_le_bytes(bytes[16..32].try_into().unwrap());
-        let u3: u64 = u64::from_le_bytes(bytes[32..48].try_into().unwrap());
+        let u0: u32 = u32::from_le_bytes(bytes[0..4].try_into().unwrap());
+        let u1: u32 = u32::from_le_bytes(bytes[4..8].try_into().unwrap());
+        let u2: u32 = u32::from_le_bytes(bytes[8..12].try_into().unwrap());
+        let u3: u32 = u32::from_le_bytes(bytes[12..16].try_into().unwrap());
 
         unsafe {m256i(_mm256_set_epi64x(u0 as i64, u1 as i64, u2 as i64, u3 as i64))}
     }
@@ -78,9 +81,16 @@ impl m256i {
     }*/
 
     pub fn palindrome_hell(a: m256i, b: m256i) -> m256i {
+        //println!("1");
         let mulhi: m256i = unsafe{m256i(_mm256_mulhi_epi16(a.0, b.0))};
-        let mybad: m256i = unsafe{m256i(_mm256_abs_epi64(mulhi.0))};
-        unsafe{m256i(_mm256_rorv_epi64(mulhi.0, mybad.0))}
+        //println!("2");
+        let mybad: m256i = unsafe{m256i(_mm256_hadds_epi16(a.0, b.0))};
+        //println!("3");
+        unsafe{m256i(_mm256_mulhi_epi16(mulhi.0, mybad.0))}
+    }
+
+    pub fn from_m128i(m1: m128i, m2: m128i) -> m256i {
+        unsafe {m256i(_mm256_set_m128i(m1.0, m2.0))}
     }
 }
 
@@ -123,5 +133,24 @@ impl m256d {
             u += f2 as u128;
             u
         }
+    }
+}
+
+#[allow(nonstandard_style)]
+#[derive(Copy, Clone)]
+pub struct m128i(pub __m128i);
+
+impl m128i {
+    pub fn from_u128(un: u128) -> m128i {
+        let bytes: [u8; 16] = un.to_le_bytes();
+        let a: u64 = u64::from_le_bytes(bytes[0..8].try_into().unwrap());
+        let b: u64 = u64::from_le_bytes(bytes[8..16].try_into().unwrap());
+        unsafe {m128i(_mm_set_epi64x(a as i64, b as i64))}
+    }
+    pub fn aesdec(&self, key: m128i) -> m128i {
+        unsafe { m128i(_mm_aesdec_si128(self.0, key.0)) }
+    }
+    pub fn aesenc(&self, key: m128i) -> m128i {
+        unsafe { m128i(_mm_aesenc_si128(self.0, key.0)) }
     }
 }

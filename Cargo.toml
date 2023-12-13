@@ -6,10 +6,13 @@ description = "Xynth is an ASIC/GPU-resistant cryptographic hashing algorithm wr
 license = "MIT"
 repository = "https://github.com/ImmortalOctogen/Xynth"
 readme = "README.md"
-categories = ["cryptography, algorithms"]
+categories = ["algorithms"] #cryptography
 keywords = ["hash", "cryptography", "algorithms"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [toolchain]
 channel = "nightly"
+
+[dependencies]
+hex = "0.4.3"
