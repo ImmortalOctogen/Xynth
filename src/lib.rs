@@ -44,8 +44,9 @@ impl XynthVM {
         }
     }
 
-    pub fn hash(&mut self, keybytes: &[u8], length: HashLength) -> String {
-        unsafe {self.init_memory(keybytes)}
+    #[target_feature(enable = "avx2")]
+    pub unsafe fn hash(&mut self, keybytes: &[u8], length: HashLength) -> String {
+        self.init_memory(keybytes);
         let mut buffer: Vec<u8> = Vec::<u8>::new();
         let mut counter: usize = 0usize;
 
@@ -110,7 +111,10 @@ impl XynthVM {
                         }
                         //println!("{:?}", chunk);
                         //println!("{:?}", u8arr);
-                        let merged: Vec<u8> = bitxor2vec(chunk.to_vec(), u8arr);
+                        let mut merged: Vec<u8> = Vec::<u8>::new();
+                        for _ in 0u8..16u8 {
+                            merged = bitxor2vec(chunk.to_vec(), u8arr.clone())
+                        }
                         //println!("{:?}", merged);
                         for i in counter * 16 - 16..counter as usize * 16 {
                             //println!("LOL {}", i);
@@ -141,7 +145,10 @@ impl XynthVM {
                         }
                         //println!("{:?}", chunk);
                         //println!("{:?}", u8arr);
-                        let merged: Vec<u8> = bitxor2vec(chunk.to_vec(), u8arr);
+                        let mut merged: Vec<u8> = Vec::<u8>::new();
+                        for _ in 0u8..16u8 {
+                            merged = bitxor2vec(chunk.to_vec(), u8arr.clone())
+                        }
                         //println!("{:?}", merged);
                         for i in counter * 16 - 16..counter as usize * 16 {
                             //println!("LOL {}", i);
@@ -172,7 +179,10 @@ impl XynthVM {
                         }
                         //println!("{:?}", chunk);
                         //println!("{:?}", u8arr);
-                        let merged: Vec<u8> = bitxor2vec(chunk.to_vec(), u8arr);
+                        let mut merged: Vec<u8> = Vec::<u8>::new();
+                        for _ in 0u8..16u8 {
+                            merged = bitxor2vec(chunk.to_vec(), u8arr.clone())
+                        }
                         //println!("{:?}", merged);
                         for i in counter * 16 - 16..counter as usize * 16 {
                             //println!("LOL {}", i);
@@ -203,7 +213,10 @@ impl XynthVM {
                         }
                         //println!("{:?}", chunk);
                         //println!("{:?}", u8arr);
-                        let merged: Vec<u8> = bitxor2vec(chunk.to_vec(), u8arr);
+                        let mut merged: Vec<u8> = Vec::<u8>::new();
+                        for _ in 0u8..16u8 {
+                            merged = bitxor2vec(chunk.to_vec(), u8arr.clone())
+                        }
                         //println!("{:?}", merged);
                         for i in counter * 16 - 16..counter as usize * 16 {
                             //println!("LOL {}", i);
@@ -244,7 +257,8 @@ impl XynthVM {
     }
 }
 
-fn arrsum(arr: &[u8]) -> u128 {
+#[target_feature(enable = "avx2")]
+unsafe fn arrsum(arr: &[u8]) -> u128 {
     let mut sum: u128 = 0u128;
     
     for i in 0..arr.len() {
@@ -253,11 +267,21 @@ fn arrsum(arr: &[u8]) -> u128 {
     sum
 }
 
-fn bitxor2vec(a: Vec<u8>, b: Vec<u8>) -> Vec<u8> {
+#[target_feature(enable = "avx2")]
+unsafe fn bitxor2vec(a: Vec<u8>, b: Vec<u8>) -> Vec<u8> {
     //println!("ye");
     let mut result: Vec<u8> = Vec::<u8>::new();
+    let mut u: u8 = 0u8;
     for (_, (aval, bval)) in a.iter().zip(&b).enumerate() {
         result.push(aval ^ bval);
+    }
+    for i in 0..result.len() - 1 {
+        result[i] ^= result[i+1];
+        u ^= result[i];
+    }
+
+    if let Some(last) = result.last_mut() {
+        *last ^= u;
     }
     result
 }

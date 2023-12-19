@@ -1,6 +1,6 @@
 [package]
 name = "xynth"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2021"
 description = "Xynth is an ASIC/GPU-resistant cryptographic hashing algorithm written in pure Rust"
 license = "MIT"

@@ -7,7 +7,7 @@ use std::arch::x86_64::{
     _mm256_aesenc_epi128, _mm256_aesdec_epi128, __m256i, __m256d, _mm256_set_epi64x, _mm256_set_pd,
     _mm256_extract_epi64, _mm256_sub_epi64, _mm256_div_pd,
     _mm256_mul_epi32, _mm256_add_epi64, _mm256_mulhi_epi16, _mm256_store_pd, _mm256_hadds_epi16,
-    __m128i, _mm_set_epi64x, _mm_aesdec_si128, _mm_aesenc_si128,
+    __m128i, _mm_set_epi64x, _mm_aesdec_si128, _mm_aesenc_si128, _mm256_castsi256_pd, _mm256_castsi256_si128,
 };
 
 #[allow(nonstandard_style)]
@@ -86,11 +86,16 @@ impl m256i {
         //println!("2");
         let mybad: m256i = unsafe{m256i(_mm256_hadds_epi16(a.0, b.0))};
         //println!("3");
-        unsafe{m256i(_mm256_mulhi_epi16(mulhi.0, mybad.0))}
+        //unsafe{m256i(_mm256_mulhi_epi16(mulhi.0, mybad.0))}
+        m256i::from_m128i(mulhi.as_m128i().aesenc(mybad.as_m128i()), mybad.as_m128i().aesenc(mulhi.as_m128i()))
     }
 
     pub fn from_m128i(m1: m128i, m2: m128i) -> m256i {
         unsafe {m256i(_mm256_set_m128i(m1.0, m2.0))}
+    }
+
+    pub fn as_m128i(&self) -> m128i {
+        unsafe{m128i(_mm256_castsi256_si128(self.0))}
     }
 }
 
@@ -133,6 +138,10 @@ impl m256d {
             u += f2 as u128;
             u
         }
+    }
+
+    pub fn from_m256i(m: m256i) -> m256d {
+        unsafe {m256d(_mm256_castsi256_pd(m.0))}
     }
 }
 
