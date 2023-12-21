@@ -111,10 +111,14 @@ impl XynthVM {
                         }
                         //println!("{:?}", chunk);
                         //println!("{:?}", u8arr);
-                        let mut merged: Vec<u8> = Vec::<u8>::new();
-                        for _ in 0u8..16u8 {
-                            merged = bitxor2vec(chunk.to_vec(), u8arr.clone())
+                        let mut merged: Vec<u8> /*= Vec::<u8>::new()*/;
+                        //for _ in 0u8..16u8 {
+                        merged = bitxor2vec(chunk.to_vec(), u8arr.clone());
+
+                        for i in 0..merged.len() {
+                            merged[i] ^= u8arr[i]
                         }
+                        //}
                         //println!("{:?}", merged);
                         for i in counter * 16 - 16..counter as usize * 16 {
                             //println!("LOL {}", i);
@@ -145,10 +149,14 @@ impl XynthVM {
                         }
                         //println!("{:?}", chunk);
                         //println!("{:?}", u8arr);
-                        let mut merged: Vec<u8> = Vec::<u8>::new();
-                        for _ in 0u8..16u8 {
-                            merged = bitxor2vec(chunk.to_vec(), u8arr.clone())
+                        let mut merged: Vec<u8> /*= Vec::<u8>::new()*/;
+                        //for _ in 0u8..16u8 {
+                        merged = bitxor2vec(chunk.to_vec(), u8arr.clone());
+
+                        for i in 0..merged.len() {
+                            merged[i] ^= u8arr[i]
                         }
+                        //}
                         //println!("{:?}", merged);
                         for i in counter * 16 - 16..counter as usize * 16 {
                             //println!("LOL {}", i);
@@ -179,10 +187,14 @@ impl XynthVM {
                         }
                         //println!("{:?}", chunk);
                         //println!("{:?}", u8arr);
-                        let mut merged: Vec<u8> = Vec::<u8>::new();
-                        for _ in 0u8..16u8 {
-                            merged = bitxor2vec(chunk.to_vec(), u8arr.clone())
+                        let mut merged: Vec<u8> /*= Vec::<u8>::new()*/;
+                        //for _ in 0u8..16u8 {
+                        merged = bitxor2vec(chunk.to_vec(), u8arr.clone());
+
+                        for i in 0..merged.len() {
+                            merged[i] ^= u8arr[i]
                         }
+                        //}
                         //println!("{:?}", merged);
                         for i in counter * 16 - 16..counter as usize * 16 {
                             //println!("LOL {}", i);
@@ -213,10 +225,14 @@ impl XynthVM {
                         }
                         //println!("{:?}", chunk);
                         //println!("{:?}", u8arr);
-                        let mut merged: Vec<u8> = Vec::<u8>::new();
-                        for _ in 0u8..16u8 {
-                            merged = bitxor2vec(chunk.to_vec(), u8arr.clone())
+                        let mut merged: Vec<u8> /*= Vec::<u8>::new()*/;
+                        //for _ in 0u8..16u8 {
+                        merged = bitxor2vec(chunk.to_vec(), u8arr.clone());
+
+                        for i in 0..merged.len() {
+                            merged[i] ^= u8arr[i]
                         }
+                        //}
                         //println!("{:?}", merged);
                         for i in counter * 16 - 16..counter as usize * 16 {
                             //println!("LOL {}", i);
@@ -272,8 +288,12 @@ unsafe fn bitxor2vec(a: Vec<u8>, b: Vec<u8>) -> Vec<u8> {
     //println!("ye");
     let mut result: Vec<u8> = Vec::<u8>::new();
     let mut u: u8 = 0u8;
+
+    let mut buf: u8;
     for (_, (aval, bval)) in a.iter().zip(&b).enumerate() {
-        result.push(aval ^ bval);
+        //result.push(aval ^ bval);
+        buf = aval ^ bval;
+        result.push((buf >> 4) + (buf << 4));
     }
     for i in 0..result.len() - 1 {
         result[i] ^= result[i+1];

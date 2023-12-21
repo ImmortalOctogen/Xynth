@@ -26,13 +26,6 @@ pub unsafe fn enc(inst: u128) -> m256i {
 
 #[target_feature(enable = "avx2")]
 pub unsafe fn dec(inst: u128) -> m256i {
-    /*let state: m256i = m256i::from_u128_one(inst);
-    let halfr: u128 = (inst << 64) >> 64;
-    let halfl: u128 = (inst >> 64) << 64;
-    let mut seed: Vec<u8> = (halfr & halfl).to_le_bytes().to_vec();
-    seed.append(&mut (halfr ^ halfl).to_le_bytes().to_vec());
-    println!("passingDEC");
-    state.aesdec(m256i::from_u8(&seed))*/
     let state: m128i = m128i::from_u128(inst);
     let halfr: u128 = (inst << 64) >> 64;
     let halfl: u128 = (inst >> 64) << 64;
@@ -50,6 +43,7 @@ pub unsafe fn add(inst: u128) -> m256i {
     let halfl: m256i = m256i::from_u128_one((inst >> 64) << 64);
     //println!("passingADD");
     m256i::add(halfl, halfr)*/
+
     let halfr: u128 = (inst << 64) >> 64;
     let halfl: u128 = (inst >> 64) << 64;
     let base: u128 = m256i::add(m256i::from_u128_one(halfl), m256i::from_u128_one(halfr)).as_u128();
@@ -66,6 +60,7 @@ pub unsafe fn sub(inst: u128) -> m256i {
     let halfl: m256i = m256i::from_u128_one((inst >> 64) << 64);
     //println!("passingSUB");
     m256i::sub(halfl, halfr)*/
+    
     let halfr: u128 = (inst << 64) >> 64;
     let halfl: u128 = (inst >> 64) << 64;
     let base: u128 = m256i::sub(m256i::from_u128_one(halfl), m256i::from_u128_one(halfr)).as_u128();
@@ -82,6 +77,7 @@ pub unsafe fn mul(inst: u128) -> m256i {
     let halfl: m256i = m256i::from_u128_one((inst >> 64) << 64);
     //println!("passingMUL");
     m256i::mul(halfl, halfr)*/
+
     let halfr: u128 = (inst << 64) >> 64;
     let halfl: u128 = (inst >> 64) << 64;
     let base: u128 = m256i::mul(m256i::from_u128_one(halfl), m256i::from_u128_one(halfr)).as_u128();
