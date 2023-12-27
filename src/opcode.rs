@@ -39,69 +39,69 @@ pub unsafe fn dec(inst: u128) -> m256i {
 
 #[target_feature(enable = "avx2")]
 pub unsafe fn add(inst: u128) -> m256i {
-    /*let halfr: m256i = m256i::from_u128_one((inst << 64) >> 64);
+    let halfr: m256i = m256i::from_u128_one((inst << 64) >> 64);
     let halfl: m256i = m256i::from_u128_one((inst >> 64) << 64);
     //println!("passingADD");
-    m256i::add(halfl, halfr)*/
+    m256i::add(halfl, halfr)
 
-    let halfr: u128 = (inst << 64) >> 64;
+    /*let halfr: u128 = (inst << 64) >> 64;
     let halfl: u128 = (inst >> 64) << 64;
     let base: u128 = m256i::add(m256i::from_u128_one(halfl), m256i::from_u128_one(halfr)).as_u128();
 
     let seed: u128 = halfr & halfl;
     let m1: m128i = m128i::from_u128(base).aesenc(m128i::from_u128(seed));
     let m2: m128i = m128i::from_u128(seed).aesenc(m128i::from_u128(base));
-    m256i::from_m128i(m1, m2)
+    m256i::from_m128i(m1, m2)*/
 }
 
 #[target_feature(enable = "avx2")]
 pub unsafe fn sub(inst: u128) -> m256i {
-    /*let halfr: m256i = m256i::from_u128_one((inst << 64) >> 64);
+    let halfr: m256i = m256i::from_u128_one((inst << 64) >> 64);
     let halfl: m256i = m256i::from_u128_one((inst >> 64) << 64);
     //println!("passingSUB");
-    m256i::sub(halfl, halfr)*/
+    m256i::sub(halfl, halfr)
     
-    let halfr: u128 = (inst << 64) >> 64;
+    /*let halfr: u128 = (inst << 64) >> 64;
     let halfl: u128 = (inst >> 64) << 64;
     let base: u128 = m256i::sub(m256i::from_u128_one(halfl), m256i::from_u128_one(halfr)).as_u128();
 
     let seed: u128 = halfr & halfl;
     let m1: m128i = m128i::from_u128(base).aesenc(m128i::from_u128(seed));
     let m2: m128i = m128i::from_u128(seed).aesenc(m128i::from_u128(base));
-    m256i::from_m128i(m1, m2)
+    m256i::from_m128i(m1, m2)*/
 }
 
 #[target_feature(enable = "avx2")]
 pub unsafe fn mul(inst: u128) -> m256i {
-    /*let halfr: m256i = m256i::from_u128_one((inst << 64) >> 64);
+    let halfr: m256i = m256i::from_u128_one((inst << 64) >> 64);
     let halfl: m256i = m256i::from_u128_one((inst >> 64) << 64);
     //println!("passingMUL");
-    m256i::mul(halfl, halfr)*/
+    m256i::mul(halfl, halfr)
 
-    let halfr: u128 = (inst << 64) >> 64;
+    /*let halfr: u128 = (inst << 64) >> 64;
     let halfl: u128 = (inst >> 64) << 64;
     let base: u128 = m256i::mul(m256i::from_u128_one(halfl), m256i::from_u128_one(halfr)).as_u128();
 
     let seed: u128 = halfr & halfl;
     let m1: m128i = m128i::from_u128(base).aesenc(m128i::from_u128(seed));
     let m2: m128i = m128i::from_u128(seed).aesenc(m128i::from_u128(base));
-    m256i::from_m128i(m1, m2)
+    m256i::from_m128i(m1, m2)*/
 }
 
 #[target_feature(enable = "avx2")]
 pub unsafe fn div(inst: u128) -> m256d {
-    /*let halfr: m256d = m256d::from_u128_one((inst << 64) >> 64);
+    let halfr: m256d = m256d::from_u128_one((inst << 64) >> 64);
     let halfl: m256d = m256d::from_u128_one((inst >> 64) << 64);
     //println!("passingDIV");
-    m256d::div(halfl, halfr)*/
-    let halfr: u128 = (inst << 64) >> 64;
+    m256d::div(halfl, halfr)
+    /*let halfr: u128 = (inst << 64) >> 64;
     let halfl: u128 = (inst >> 64) << 64;
     let base: u128 = m256d::div(m256d::from_u128_one(halfl), m256d::from_u128_one(halfr)).as_u128();
 
     let seed: u128 = halfr & halfl;
     let m1: m128i = m128i::from_u128(base).aesenc(m128i::from_u128(seed));
     let m2: m128i = m128i::from_u128(seed).aesenc(m128i::from_u128(base));
-    m256d::from_m256i(m256i::from_m128i(m1, m2))
+    m256d::from_m256i(m256i::from_m128i(m1, m2))*/
 }
 
 #[target_feature(enable = "avx2")]

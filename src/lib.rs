@@ -24,7 +24,6 @@ pub enum HashLength {
 /// Documentation is coming soon...
 pub struct Registers {
     rwr0 : u128,
-    rwr1 : u128,
 }
 
 impl Default for XynthVM {
@@ -39,21 +38,22 @@ impl XynthVM {
             memory : [0u128; 16777216].to_vec().into_boxed_slice(), //256 MiB
             registers : Registers {
                 rwr0 : 0u128,
-                rwr1 : 0u128,
             }
         }
     }
 
     #[target_feature(enable = "avx2")]
-    pub unsafe fn hash(&mut self, keybytes: &[u8], length: HashLength) -> String {
-        self.init_memory(keybytes);
+    pub unsafe fn hash(&mut self, keybytes: &[u8], length: HashLength, salt: Option<&[u8]>) -> String {
+        if salt.is_some() {
+            self.init_memory(salt.unwrap_unchecked());
+        } else {
+            self.init_memory(keybytes);
+        }
         let mut buffer: Vec<u8> = Vec::<u8>::new();
         let mut counter: usize = 0usize;
-
         for i in 0..self.memory.len() {
             self.registers.rwr0 = self.memory[i];
-            self.registers.rwr1 = (self.memory[i] << 125) >> 125;
-            let op = self.registers.rwr1;
+            let op: u128 = (self.memory[i] << 125) >> 125;
             match op {
                 op if op == OpCode::ADD as u128 => {
                     let a: u128 = add(self.registers.rwr0).as_u128();
@@ -85,7 +85,6 @@ impl XynthVM {
                 },
                 _ => {
                     let a: u128 = add(self.registers.rwr0).as_u128();
-                    let _b: u128 = enc(a).as_u128();
                     self.memory[i] = a;
                 }
             }
@@ -267,7 +266,7 @@ impl XynthVM {
                 secn /= 10;
             }
             base += revrs;
-            mem[i] = base;
+            mem[i] = base ^ revrs; //НОВЫЙ XOR
             //println!("Reversed number is {}", revrs);
         }
     }
