@@ -45,7 +45,7 @@ impl XynthVM {
     #[target_feature(enable = "avx2")]
     pub unsafe fn hash(&mut self, keybytes: &[u8], length: HashLength, salt: Option<&[u8]>) -> String {
         if salt.is_some() {
-            self.init_memory(salt.unwrap_unchecked());
+            self.init_memory(&bitxor2vec(keybytes.to_vec(), salt.unwrap_unchecked().to_vec()));
         } else {
             self.init_memory(keybytes);
         }
@@ -265,8 +265,8 @@ impl XynthVM {
                 revrs = (revrs << 3) + (revrs << 1) + secn % 10 ;
                 secn /= 10;
             }
-            base += revrs;
-            mem[i] = base ^ revrs; //НОВЫЙ XOR
+            base += base ^ revrs; //АНТИПЕРЕПОЛНЕНИЕ u128. СТАРЫЙ: base += revrs;
+            mem[i] = base;
             //println!("Reversed number is {}", revrs);
         }
     }
