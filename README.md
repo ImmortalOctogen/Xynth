@@ -2,6 +2,7 @@
 [![Discord](https://img.shields.io/discord/1143160291773927494?style=flat&logo=discord&logoColor=00ECFF&label=discord&link=discord.gg%2FuRRzzftdCw)](https://discord.gg/2FuRRzzftdCw)
 [![Crates.io Version](https://img.shields.io/crates/v/xynth)](https://crates.io/crates/xynth)
 [![docs.rs](https://img.shields.io/docsrs/xynth?style=flat&link=docs.rs%2Fxynth)](https://docs.rs/xynth)
+<center><img src="https://github.com/ImmortalOctogen/Xynth/blob/master/xynth_logo.png" width="256"></center>
 
 - My profiles
     - RetroShare ID - 
