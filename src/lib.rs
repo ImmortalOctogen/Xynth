@@ -2,8 +2,17 @@
 //! Xynth is developed for the same purpose, as RandomX - to avoid processing algo on GPU and ASIC.
 //! # Examples
 //! ```
-//! let a = vec![1, 2, 3];
-//! assert_eq!(a.len(), 3);
+//! use xynth::XynthVM;
+//! fn main() {
+//!    let mut m: XynthVM = XynthVM::new();
+//!    let a;
+//!    let b;
+//!    unsafe {
+//!        a = m.hash(&1i32.to_le_bytes(), xynth::HashLength::H256, None);
+//!        b = m.hash(&2i32.to_le_bytes(), xynth::HashLength::H256, None);
+//!    }
+//!    assert!(a != b)
+//!}
 //! ```
 //#![feature(stdsimd)]
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))//, target_feature = "avx2") //all()
