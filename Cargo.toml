@@ -1,6 +1,6 @@
 [package]
 name = "xynth"
-version = "0.1.7"
+version = "0.2.0"
 edition = "2021"
 description = "Xynth is an ASIC/GPU-resistant cryptographic hashing algorithm written in pure Rust for x64 CPUs with AVX2 support"
 license = "MIT"
@@ -10,9 +10,3 @@ categories = ["algorithms"] #cryptography
 keywords = ["hash", "cryptography", "algorithms"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-#[toolchain]
-#channel = "nightly"
-
-#[dependencies]
-#hex = "0.4.3"
